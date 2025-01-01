@@ -3,10 +3,12 @@ import React, { useEffect, useState } from "react";
 export default function Tictactoe() {
 	const [data, setData] = useState(Array(9).fill(null))
 	const nextPlayer = data.filter(Boolean).length % 2 === 0 ? "X" : "O";
+	const [winningTiles, setWinningTiles] = useState([]);
 
 	const reset = () => {
 		setData(Array(9).fill(null))
 		setWinner(null)
+		setWinningTiles([])
 	}
 
 	const handleTileClick = (index) => {
@@ -40,6 +42,7 @@ export default function Tictactoe() {
 				data[a] === data[b] &&
 				data[a] === data[c]
 			) {
+				setWinningTiles([a, b, c]);
 				setWinner(data[a]);
 				setTimeout(() => {
 					reset()
@@ -56,7 +59,7 @@ export default function Tictactoe() {
 		{
 			data.map((item, index) => {
 				return (
-					<div className="cell" key={index} onClick={(e) => handleTileClick(index)}>
+					<div className={`cell ${winningTiles.includes(index) ? "winning-cell" : ""}`} key={index} onClick={(e) => handleTileClick(index)}>
 						{data[index]}
 					</div>
 				)
